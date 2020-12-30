@@ -8,6 +8,9 @@ class Position(models.Model):
         return self.title
 
 
-class EmployeeIds(models.Model):
+class EmployeeId(models.Model):
     employee_id = models.IntegerField()
-    position_id = models.ForeignKey(to='Position', on_delete=models.CASCADE)
+    position_id = models.ForeignKey(to='Position', on_delete=models.CASCADE, related_name='employees')
+
+    def __str__(self):
+        return f'Employee #{self.employee_id}'

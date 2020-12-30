@@ -1,7 +1,6 @@
 from django.db import models
 from django.forms.models import model_to_dict
 from employee.settings import PUBLISH_CHANNEL
-from django.core import serializers
 
 from .pub import publish_data_on_redis
 
@@ -26,7 +25,7 @@ class Department(models.Model):
         return self.title
 
 
-class PositionIds(models.Model):
+class PositionId(models.Model):
     position_id = models.IntegerField()
     employee_id = models.ForeignKey(to='Employee', on_delete=models.CASCADE, related_name='positions')
 
