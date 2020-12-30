@@ -1,4 +1,9 @@
 from django.db import models
+from django.forms.models import model_to_dict
+from employee.settings import PUBLISH_CHANNEL
+from django.core import serializers
+
+from .pub import publish_data_on_redis
 
 
 class Employee(models.Model):
@@ -23,4 +28,10 @@ class Department(models.Model):
 
 class PositionIds(models.Model):
     position_id = models.IntegerField()
-    employee_id = models.ForeignKey(to='Employee', on_delete=models.CASCADE)
+    employee_id = models.ForeignKey(to='Employee', on_delete=models.CASCADE, related_name='positions')
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        message = model_to_dict(self)
+        publish_data_on_redis(PUBLISH_CHANNEL, message)
+        print(message)
